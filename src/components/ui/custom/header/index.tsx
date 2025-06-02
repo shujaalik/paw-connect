@@ -1,22 +1,60 @@
-import { Button } from "@/components/ui/button";
 import User from "./user";
-import { FiMenu } from "react-icons/fi";
 import Logo from "@/assets/paw-connect-logo.png";
+import {
+    NavigationMenu,
+    NavigationMenuContent,
+    NavigationMenuItem,
+    NavigationMenuLink,
+    NavigationMenuList,
+    NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
 
 const Header = () => {
 
     return <div className="flex w-full justify-between items-center">
         <div>
-            <Button variant={"outline"}>
-                <FiMenu />
-            </Button>
+            <NavigationMenu>
+                <NavigationMenuList>
+                    <NavigationMenuItem>
+                        <NavigationMenuTrigger className="border">Menu</NavigationMenuTrigger>
+                        <NavigationMenuContent>
+                            <NavigationMenuLink>
+                                <ul className="grid w-[300px] gap-4">
+                                    <li>
+                                        <NavigationMenuLink asChild>
+                                            <div>
+                                                <div className="font-medium">Components</div>
+                                                <div className="text-muted-foreground">
+                                                    Browse all components in the library.
+                                                </div>
+                                            </div>
+                                        </NavigationMenuLink>
+                                        <NavigationMenuLink asChild>
+                                            <div>
+                                                <div className="font-medium">Documentation</div>
+                                                <div className="text-muted-foreground">
+                                                    Learn how to use the library.
+                                                </div>
+                                            </div>
+                                        </NavigationMenuLink>
+                                        <NavigationMenuLink asChild>
+                                            <div>
+                                                <div className="font-medium">Blog</div>
+                                                <div className="text-muted-foreground">
+                                                    Read our latest blog posts.
+                                                </div>
+                                            </div>
+                                        </NavigationMenuLink>
+                                    </li>
+                                </ul>
+                            </NavigationMenuLink>
+                        </NavigationMenuContent>
+                    </NavigationMenuItem>
+                </NavigationMenuList>
+            </NavigationMenu>
         </div>
         <div className="text-center">
             <img src={Logo} className="h-32 w-auto" />
-            {/* <h1 className="uppercase font-teko scroll-m-20 text-2xl font-extrabold tracking-tight lg:text-4xl">
-                Paw Connect
-            </h1>
-            <p className="text-sm text-muted-foreground font-medium">A Digital Network for Stray and Homeless Animal Welfare</p> */}
         </div>
         <div className="flex justify-center items-center gap-4">
             <User />

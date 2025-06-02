@@ -1,15 +1,17 @@
-import Header from './components/ui/custom/header'
-import NGOList from './routes/ngo-list'
+import { Route, Routes } from "react-router-dom";
+import Navigation from "./components/ui/custom/navigation"
+import Home from "./routes/home";
 
 function App() {
-  return (
-    <div className="flex justify-center items-start flex-col px-10 py-4 gap-5">
-      <Header />
-      <div className="mt-10 w-full">
-        <NGOList />
-      </div>
+  return <div className="w-screen overflow-hidden h-screen font-poppins bg-linear-360 from-[#FFD7C7] to-background">
+    <Navigation />
+    <div className="w-full h-full py-30 px-5">
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
+      </Routes>
     </div>
-  )
+  </div>
 }
 
 export default App
