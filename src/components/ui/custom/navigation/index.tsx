@@ -18,16 +18,16 @@ const Navigation = () => {
         navigate(`/${page}`);
     }
 
-    return <div className="absolute h-full p-5 w-full flex flex-col justify-between items-center z-20">
-        <div className="w-full flex justify-between items-center">
+    return <div className="absolute h-full pt-5 w-full flex flex-col justify-between items-center z-20">
+        <div className="w-full flex px-5 justify-between items-center">
             <User />
             <div className="p-0 rounded-full  text-4xl">
                 <img src={logo} alt="paw connect" className="w-auto h-20" />
                 {/* <BsThreeDotsVertical className="opacity-70" /> */}
             </div>
         </div>
-        <div className="flex justify-center items-center">
-            <div className="w-fit flex items-center justify-center gap-5 p-2 bg-white rounded-full shadow-md transition-all duration-300">
+        <div className="fixed bottom-0 flex justify-center items-center w-full">
+            <div className="w-full flex items-center justify-around gap-5 p-2 bg-white shadow-md transition-all duration-300">
                 <NavItem label="Home" icon={<FaHome />} isActive={activeTab === "home"} onClick={() => changePage("home")} />
                 <NavItem label="Map" icon={<FaMap />} isActive={activeTab === "map"} onClick={() => changePage("map")} />
                 <NavItem label="Adoption" icon={<MdOutlinePets />} isActive={activeTab === "adoption"} onClick={() => changePage("adoption")} />
@@ -45,7 +45,7 @@ const NavItem = ({ icon, label, isActive, onClick }: {
 }) => {
     return (
         <div
-            className={`text-3xl flex items-center gap-3 cursor-pointer transition-colors ${isActive ? "bg-primary text-muted" : "bg-gray-100 text-muted-foreground"} rounded-full p-3`}
+            className={`text-3xl flex items-center gap-3 cursor-pointer transition-colors ${isActive ? "bg-primary text-muted" : "text-muted-foreground"} rounded-lg p-3`}
             onClick={onClick}
         >
             {icon}
