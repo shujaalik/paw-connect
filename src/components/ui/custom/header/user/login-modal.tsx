@@ -8,7 +8,11 @@ import Spinner from "../../spinner"
 import { signin, signup } from "@/components/api/auth"
 
 const Login = ({
+    onOpenChange,
     ...props
+}: {
+    onOpenChange: (open: boolean) => void,
+    [key: string]: any
 }) => {
     const [loading, setLoading] = useState<string | null>(null);
     const [option, setOption] = useState<"signin" | "signup">("signin");
@@ -21,15 +25,17 @@ const Login = ({
                     {option === "signin" ? "Enter your email below to login to your account" : "Enter your email below to create a new account"}
                 </DialogDescription>
             </DialogHeader>
-            {option === "signin" ? <SignIn setLoading={setLoading} stateChange={setOption} /> : <SignUp setLoading={setLoading} stateChange={setOption} />}
+            {option === "signin" ? <SignIn onOpenChange={onOpenChange} setLoading={setLoading} stateChange={setOption} /> : <SignUp onOpenChange={onOpenChange} setLoading={setLoading} stateChange={setOption} />}
         </DialogContent>
     </div>
 }
 
 const SignUp = ({
+    onOpenChange,
     stateChange,
     setLoading
 }: {
+    onOpenChange: (open: boolean) => void,
     stateChange: React.Dispatch<React.SetStateAction<"signin" | "signup">>,
     setLoading: React.Dispatch<React.SetStateAction<string | null>>
 }) => {
@@ -53,6 +59,7 @@ const SignUp = ({
             // e.currentTarget.reset();
             toast.success("Account created successfully!");
             stateChange("signin");
+            onOpenChange(false);
         } catch (error) {
             console.error("Error during signup:", error);
             toast.error("An error occurred while signing up. Please try again.");
@@ -98,9 +105,11 @@ const SignUp = ({
 }
 
 const SignIn = ({
+    onOpenChange,
     stateChange,
     setLoading
 }: {
+    onOpenChange: (open: boolean) => void,
     stateChange: React.Dispatch<React.SetStateAction<"signin" | "signup">>,
     setLoading: React.Dispatch<React.SetStateAction<string | null>>
 }) => {
@@ -119,6 +128,7 @@ const SignIn = ({
             await signin(email, password);
             // e.currentTarget.reset();
             toast.success("Logged in successfully!");
+            onOpenChange(false);
         } catch (error) {
             console.error("Error during login:", error);
             toast.error("An error occurred while logging in. Please try again.");
