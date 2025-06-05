@@ -96,12 +96,12 @@ const Listing = ({
     image: string;
     location: string;
 }) => {
-    return <Card className="min-w-[250px] w-fit h-auto flex gap-2 p-4 flex-shrink-0">
-        <img src={image} alt={name} className="w-auto h-40 rounded" />
+    return <Card className="min-w-[150px] w-fit h-auto flex gap-2 p-4 flex-shrink-0">
+        <img src={image} alt={name} className="w-auto h-30 rounded" />
         <div className="flex gap-3">
             <div className="flex flex-col justify-center">
-                <p className="font-semibold font-teko text-3xl">{name}</p>
-                <p className="text-md text-gray-500">{animal}</p>
+                <p className="font-semibold font-teko text-xl">{name}</p>
+                <p className="text-sm text-gray-500 uppercase">{animal}</p>
             </div>
         </div>
         <div className="flex justify-between mt-auto">

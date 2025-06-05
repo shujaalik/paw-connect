@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import type { IconType } from "react-icons/lib";
 import { PiBird, PiCat, PiDog, PiRabbit } from "react-icons/pi";
 import { Separator } from "@/components/ui/separator"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -15,20 +15,67 @@ import {
 } from "@/components/ui/select"
 import Spinner from "@/components/ui/custom/spinner";
 import { toast } from "sonner";
-import { insert } from "@/components/api/db";
-import { upload } from "@/components/api/storage";
+import { get, insert } from "@/components/api/db";
+import { getPublicUrls, upload } from "@/components/api/storage";
+import { Listing } from "../home";
 
 const Adoptions = () => {
     const [state, setState] = useState(false);
+    const [filterType, setFilterType] = useState("all");
+    const [listings, setListings] = useState<{
+        name: string;
+        animal: string;
+        gender: string;
+        image: string;
+        location: string;
+    }[]>([]);
+    const [rawListings, setRawListings] = useState<{
+        name: string;
+        animal: string;
+        gender: string;
+        image: string;
+        location: string;
+    }[]>([]);
+
+    useEffect(() => {
+        setListings(rawListings.filter((listing) => {
+            if (filterType === "all") return true;
+            return listing.animal.toLowerCase() === filterType.toLowerCase();
+        }));
+    }, [rawListings, filterType]);
+
+    const getData = async () => {
+        const [rows, images] = await Promise.all([get("adoption_listings"), getPublicUrls("adoptions", "images")]);
+        const listingsData = rows.map((row: any, index: number) => ({
+            name: row.pet_name,
+            animal: row.pet_type,
+            gender: row.pet_gender ? "Male" : "Female",
+            image: images[index] || "",
+            location: row.location,
+        }));
+        setRawListings(listingsData);
+    };
+
+    useEffect(() => {
+        getData();
+    }, []);
 
     return <div className="py-5 flex w-full h-full flex-col gap-5">
         <div>
             <p className="font-teko text-2xl font-semibold mb-2">Categories</p>
             <div className="flex w-full justify-around items-center gap-5">
-                <Category title={"Cat"} Icon={PiCat} />
-                <Category title={"Dog"} Icon={PiDog} />
-                <Category title={"Rabbit"} Icon={PiRabbit} />
-                <Category title={"Bird"} Icon={PiBird} />
+                <div onClick={() => setFilterType("cat")}>
+                    <Category title={"Cat"} Icon={PiCat} />
+                </div>
+                <div onClick={() => setFilterType("dog")}>
+                    <Category title={"Dog"} Icon={PiDog} />
+                </div>
+                <div onClick={() => setFilterType("rabbit")}>
+                    <Category title={"Rabbit"} Icon={PiRabbit} />
+                </div>
+                <div onClick={() => setFilterType("bird")}>
+                    <Category title={"Bird"} Icon={PiBird} />
+                </div>
             </div>
         </div>
         <Separator />
@@ -41,12 +88,13 @@ const Adoptions = () => {
                             <Button>Upload</Button>
                         </DialogTrigger>
                         <DialogContent>
-                            <AddListing onOpenChange={setState} />
+                            <AddListing getData={getData} onOpenChange={setState} />
                         </DialogContent>
                     </Dialog>
                 </div>
             </div>
-            <div className="w-full grid grid-flow-row grid-cols-2 gap-4">
+            <div className="w-full grid grid-flow-row grid-cols-2 gap-4 mt-3">
+                {listings.map((listing, index) => <Listing key={index} animal={listing.animal} name={listing.name} gender={listing.gender} image={listing.image} location={listing.location} />)}
             </div>
         </div>
     </div>
@@ -54,8 +102,10 @@ const Adoptions = () => {
 
 const AddListing = ({
     onOpenChange,
+    getData
 }: {
     onOpenChange: (open: boolean) => void,
+    getData: () => Promise<void>;
 }) => {
     const [loading, setLoading] = useState<string | null>(null);
     const handle = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -78,6 +128,7 @@ const AddListing = ({
             await upload("adoptions", `images/${image.name}`, image);
             toast.success("Listing uploaded successfully!");
             onOpenChange(false);
+            getData();
         } catch (error) {
             console.error("Error uploading listing:", error);
             toast.error("An error occurred while signing up. Please try again.");
