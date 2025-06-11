@@ -18,4 +18,10 @@ const signup = async (email: string, password: string) => {
   return data;
 };
 
-export { signin, signup };
+const logout = async () => {
+  const { error } = await auth.signOut();
+  if (error) throw error;
+  return true;
+};
+
+export { signin, signup, logout };

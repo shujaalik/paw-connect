@@ -1,23 +1,16 @@
-import { ClipLoader } from "react-spinners";
+import { Spinner } from "../spinner";
 
-const Spinner = ({
+const FullScreenSpinner = ({
     message = "Loading...",
 }: {
     message?: string;
 }) => {
-    return <>
-        <div className="fixed inset-0 bg-gray-300/40 transition-opacity z-60" aria-hidden="true"></div>
-        <div className="flex justify-center items-center gap-2 fixed inset-0 z-70 w-screen overflow-y-auto">
-            <ClipLoader
-                // size={size}
-                color={"var(--primary)"}
-                loading={true}
-            />
-            <span className='message'>
-                {message}...
-            </span>
-        </div>
-    </>
+    return <div
+        className="fixed top-0 left-0 w-full h-full flex justify-center items-center z-10 bg-popover/50">
+        <Spinner size="large">
+            {message}...
+        </Spinner>
+    </div>
 }
 
-export default Spinner
+export default FullScreenSpinner
