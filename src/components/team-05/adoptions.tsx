@@ -179,7 +179,7 @@ const AddListing = ({
       const location = formData.get("location") as string;
       const image = formData.get("image") as File;
       const petType = formData.get("pet_type") as string;
-      const petGender = formData.get("pet_gender") === "male";
+      const petGender = formData.get("gender") === "male";
       const unix = Math.floor(Date.now() / 1000);
       await insert("adoption_listings", {
         pet_name,
